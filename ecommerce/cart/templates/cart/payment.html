@@ -1,75 +1,21 @@
-<!-- cart/cart.html -->
-
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<style>
-		/* Add CSS styles for flex container and items */
-		.product-list {
-			display: flex;
-			flex-wrap: wrap; /* Allow items to wrap to the next row if necessary */
-			justify-content: space-between; /* Space items evenly along the main axis */
-			list-style: none; /* Remove list styles */
-			padding: 0;
-		}
-
-		.product-item {
-			
-			flex: 1; /* Grow to fill available space evenly */
-			/* Limit item width to avoid overcrowding */
-			margin: 10px; /* Add spacing between items */
-			border: 1px solid #ccc; /* Add a border for visual separation */
-			padding: 10px;
-			text-align: center;
-		}
-
-		/* Style the "Buy Now" button */
-		.buy-now-button {
-			display: block;
-			margin-top: 10px;
-			background-color: #007bff;
-			color: #fff;
-			text-decoration: none;
-			padding: 5px 10px;
-			border-radius: 5px;
-		}
-	</style>
-	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <meta charset="UTF-8">
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-
 <body>
-
-	<h1>Your Shopping Cart</h1>
-
-	<div class="product-list">
-
-	
-
-	{% for item in cart_items %}
-	<div class="product-item">
-		<p>{{ item.product.name }} ({{ item.quantity }})</p>
-		<p>Price: &#8377;{{ item.product.price }}</p>
-		<a href="{% url 'cart:remove_from_cart' item.id %}">Remove</a>
-	</div>
-	{% empty %}
-	<p>Your cart is empty.</p>
-	{% endfor %}
-
-	</div>
-
-	<p>Total Price: &#8377;{{ total_price }}</p>
-
-	<a href="{% url 'cart:product_list' %}">Continue Shopping</a>
-	<form id="payment-form">
+    <h1>Razorpay Payment Form</h1>
+    <form id="payment-form">
         {% csrf_token %}
-        <input type="hidden" id="amount" name="amount" value="{{ total_price }}">
+        <label for="amount">Enter Amount (in INR):</label>
+        <input type="number" id="amount" name="amount" required>
         <button type="button" id="pay-button">Pay Now</button>
     </form>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
         $(document).ready(function() {
             $("#pay-button").click(function(e) {
                 e.preventDefault(); // Prevent the default form submission
